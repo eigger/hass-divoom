@@ -68,9 +68,9 @@ class DivoomLight(LightEntity):
         self.effect = self.effect_list[channel]
         self._brightness = int((brightness_percent / 100.0) * 255)
 
-    @property
-    def supported_color_modes(self) -> set[ColorMode] | set[str] | None:
-        return {ColorMode.ONOFF, ColorMode.BRIGHTNESS}
+    # @property
+    # def supported_color_modes(self) -> set[ColorMode] | set[str] | None:
+    #     return {ColorMode.ONOFF, ColorMode.BRIGHTNESS}
     
     @property
     def supported_features(self) -> LightEntityFeature:
