@@ -33,16 +33,17 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, update=Fals
     @callback
     def message_service(call: ServiceCall) -> None:
         """My first service."""
-        hass.async_add_executor_job(async_message_service, call)
-
-    def async_message_service(call):
         pixoo = hass.data[DOMAIN][entry.entry_id]['pixoo']
-        pixoo.set_screen_off()
+        hass.async_add_executor_job(async_message_service, pixoo, call)
 
     # Register our service with Home Assistant.
     hass.services.async_register(DOMAIN, 'show_message', message_service)
     return True
 
+def async_message_service(pixoo, call):
+    msg = call.data.message
+    pixoo.clear()
+    pixoo.send_text(msg)
 
 
 def load_pixoo(ip_address: str):

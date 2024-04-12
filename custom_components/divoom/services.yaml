@@ -26,23 +26,23 @@ show_page:
           mode: box
 show_message:
   name: Send a message to Divoom
-  description: Display a specified page on the Divoom. Please select the "... Current Page" entity of the device.
+  description: Display message on the Divoom
   target:
     entity:
       domain: light
       integration: divoom
   fields:
     message:
-      name: Page Data
-      description: "Consider this as one page, so start at 'page_type=something' (ignore the '-' in front)."
+      name: Message
+      description: "message..."
       required: true
-      example: "page_type: clock\n enabled: true\n id: 182"
+      example: "test"
       selector:
-        object:
+        text:
     duration:
       name: Duration of the notification
-      description: "This will be the time the message is displayed on the device. Default: the device's scan_time in the config."
-      required: false
+      description: "This will be the time the message is displayed on the device."
+      required: true
       example: "10"
       selector:
         number:
