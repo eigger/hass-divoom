@@ -46,7 +46,7 @@ def async_message_service(pixoo, call):
         channel = pixoo.get_channel()
         pixoo.clear()
         pixoo.push()
-        pixoo.send_text(msg)
+        pixoo.send_text(str(msg))
         time.sleep(call.data['duration'])
         pixoo.set_channel(channel)
     else:
