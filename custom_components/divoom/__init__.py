@@ -43,12 +43,12 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, update=Fals
 def async_message_service(pixoo, call):
     if 'message' in call.data:
         msg = call.data['message']
-        pixoo.set_channel(3)
+        channel = pixoo.get_channel()
         pixoo.clear()
         pixoo.push()
         pixoo.send_text(msg)
         time.sleep(call.data['duration'])
-        pixoo.set_channel(0)
+        pixoo.set_channel(channel)
     else:
         _LOGGER.error(f"Error message: {call.data}")
 

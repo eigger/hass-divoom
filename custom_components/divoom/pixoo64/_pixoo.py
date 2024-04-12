@@ -280,7 +280,7 @@ class Pixoo:
 
     def send_text(self, text, xy=(0, 0), color=get_rgb("white"), identifier=1,
                   font=2, width=64,
-                  movement_speed=0,
+                  movement_speed=100,
                   direction=TextScrollDirection.LEFT):
 
 
