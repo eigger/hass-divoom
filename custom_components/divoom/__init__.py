@@ -41,9 +41,10 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, update=Fals
     return True
 
 def async_message_service(pixoo, call):
-    msg = call.data.message
-    pixoo.clear()
-    pixoo.send_text(msg)
+    if 'message' in call.data:
+        msg = call.data['message']
+        pixoo.clear()
+        pixoo.send_text(msg)
 
 
 def load_pixoo(ip_address: str):
