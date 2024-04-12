@@ -34,7 +34,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, update=Fals
     def message_service(call: ServiceCall) -> None:
         """My first service."""
         pixoo = hass.data[DOMAIN][entry.entry_id]['pixoo']
-        _LOGGER.info('Received data', call.data)
+        pixoo.set_screen_off()
+
 
     # Register our service with Home Assistant.
     hass.services.async_register(DOMAIN, 'show_message', message_service)

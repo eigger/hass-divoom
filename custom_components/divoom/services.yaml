@@ -25,7 +25,7 @@ show_page:
           unit_of_measurement: seconds
           mode: box
 show_message:
-  name: Send a page to Divoom
+  name: Send a message to Divoom
   description: Display a specified page on the Divoom. Please select the "... Current Page" entity of the device.
   target:
     entity:
