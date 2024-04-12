@@ -303,6 +303,7 @@ class Pixoo:
         data = response.json()
         if data['error_code'] != 0:
             self.__error(data)
+        return data
 
     def set_brightness(self, brightness):
         # This won't be possible
