@@ -25,7 +25,7 @@ class DivoomLight(LightEntity):
         self.color_mode = ColorMode.BRIGHTNESS
         self._brightness = None
         self._state = None
-        self._effect_list = ["Faces", "Cloud Channel", "Visualizer", "Custom"]
+        self.effect_list = ["Faces", "Cloud Channel", "Visualizer", "Custom"]
         _LOGGER.debug(f"Divoom IP address from configuration: {self._ip_address}")
 
     @property
@@ -47,11 +47,10 @@ class DivoomLight(LightEntity):
             brightness_percent = int((self._brightness / 255.0) * 100)
             self._pixoo.set_brightness(brightness_percent)
         if ATTR_EFFECT in kwargs:
-            self._effect = kwargs[ATTR_EFFECT]
-            if self._effect in self._effect_list:
-                if not self._effect_list None:
-                    channel = self._effect_list.index(self._effect)
-                    self._pixoo.set_channel(channel)
+            self.effect= kwargs[ATTR_EFFECT]
+            if self.effect in self.effect_list:
+                channel = self.effect_list.index(self.effect)
+                self._pixoo.set_channel(channel)
 
         self._state = True
         self._pixoo.set_screen(True)
