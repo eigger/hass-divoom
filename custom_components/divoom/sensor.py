@@ -76,6 +76,9 @@ class ConfigSensor(Entity):
             self._update_interval = None
 
     async def _async_update(self, now=None):
+        await self.hass.async_add_executor_job(self._update_config)
+
+    async def _update_config(self):
         config = self._pixoo.get_all_conf()
         self._attr_extra_state_attributes = config.copy()
         self.last_update = datetime.now()
@@ -140,6 +143,9 @@ class WeatherSensor(Entity):
             self._update_interval = None
 
     async def _async_update(self, now=None):
+        await self.hass.async_add_executor_job(self._update_weather)
+
+    async def _update_weather(self):
         config = self._pixoo.get_weather()
         self._attr_extra_state_attributes = config.copy()
         self.last_update = datetime.now()
