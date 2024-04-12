@@ -73,8 +73,9 @@ class DivoomLight(LightEntity):
         return {ColorMode.ONOFF, ColorMode.BRIGHTNESS}
     
     @property
-    def supported_features(self) -> int:
-        return self.supported_features | LightEntityFeature.EFFECT
+    def supported_features(self) -> LightEntityFeature:
+        """Flag supported features."""
+        return self._attr_supported_features | LightEntityFeature.EFFECT
     
     @property
     def unique_id(self):
