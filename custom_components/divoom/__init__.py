@@ -30,17 +30,18 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, update=Fals
     if not update:
         entry.add_update_listener(async_update_entry)
 
-    @callback
-    def message_service(call: ServiceCall) -> None:
-        """My first service."""
-        pixoo = hass.data[DOMAIN][entry.entry_id]['pixoo']
-        pixoo.set_screen_off()
-
-
     # Register our service with Home Assistant.
     hass.services.async_register(DOMAIN, 'show_message', message_service)
     return True
 
+@callback
+def message_service(call: ServiceCall) -> None:
+    """My first service."""
+    await self.hass.async_add_executor_job(async_message_service(call))
+
+def async_message_service(call):
+    pixoo = hass.data[DOMAIN][entry.entry_id]['pixoo']
+    pixoo.set_screen_off()
 
 def load_pixoo(ip_address: str):
     """Load the Pixoo device. This is a blocking call."""
