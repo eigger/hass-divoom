@@ -1,4 +1,4 @@
-from homeassistant.components.light import (LightEntity, ATTR_BRIGHTNESS, SUPPORT_BRIGHTNESS, ColorMode)
+from homeassistant.components.light import (LightEntity, ATTR_BRIGHTNESS, SUPPORT_BRIGHTNESS, ColorMode, LightEntityFeature)
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.helpers.entity import DeviceInfo
 
@@ -52,6 +52,14 @@ class DivoomLight(LightEntity):
         self._state = False
         self._pixoo.set_screen(False)
 
+    def set_effect(self, effect: str) -> None:
+        try:
+            # self.effect_list에서 effect_name의 인덱스를 찾아 반환
+            channel = self.effect_list.index(effect)
+            self._pixoo.set_channel(channel)
+        except ValueError:
+            return
+
     def update(self) -> None:
         conf = self._pixoo.get_all_conf()
         self._state = conf['LightSwitch'] == 1
@@ -62,8 +70,12 @@ class DivoomLight(LightEntity):
 
     @property
     def supported_color_modes(self) -> set[ColorMode] | set[str] | None:
-        return {ColorMode.BRIGHTNESS}
-
+        return {ColorMode.ONOFF, ColorMode.BRIGHTNESS}
+    
+    @property
+    def supported_features(self) -> int:
+        return self.supported_features | LightEntityFeature.EFFECT
+    
     @property
     def unique_id(self):
         return "light_" + str(self._config_entry.entry_id)
