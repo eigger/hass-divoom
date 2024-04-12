@@ -33,7 +33,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, update=Fals
     @callback
     def message_service(call: ServiceCall) -> None:
         """My first service."""
-        hass.async_add_executor_job(async_message_service(call))
+        await hass.async_add_executor_job(async_message_service(call))
 
     def async_message_service(call):
         pixoo = hass.data[DOMAIN][entry.entry_id]['pixoo']
