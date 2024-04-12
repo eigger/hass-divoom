@@ -49,7 +49,7 @@ def async_message_service(pixoo, call):
         pixoo.send_text(msg)
         time.sleep(call.data['duration'])
         pixoo.set_channel(0)
-    else
+    else:
         _LOGGER.error(f"Error message: {call.data}")
 
 
