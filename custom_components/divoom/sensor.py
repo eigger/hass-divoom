@@ -85,7 +85,7 @@ class ConfigSensor(Entity):
 
     @property
     def state(self):
-        return self.last_update
+        return self._attr_extra_state_attributes['Error code']
 
     @property
     def entity_category(self):

@@ -53,13 +53,13 @@ class DivoomLight(LightEntity):
         self._state = False
         self._pixoo.set_screen(False)
 
-    def set_effect(self, effect: str) -> None:
+    def effect(self, value):
+        _LOGGER.debug(f"set effect: {value}")
         try:
-            # self.effect_list에서 effect_name의 인덱스를 찾아 반환
-            channel = self.effect_list.index(effect)
+            channel = self.effect_list.index(value)
             self._pixoo.set_channel(channel)
         except ValueError:
-            return
+            _LOGGER.debug(f"set effect error: {ValueError}")
 
     def update(self) -> None:
         conf = self._pixoo.get_all_conf()
