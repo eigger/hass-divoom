@@ -44,7 +44,10 @@ def async_message_service(pixoo, call):
     if 'message' in call.data:
         msg = call.data['message']
         pixoo.clear()
+        pixoo.push()
         pixoo.send_text(msg)
+    else
+        _LOGGER.error(f"Error message: {call.data}")
 
 
 def load_pixoo(ip_address: str):
