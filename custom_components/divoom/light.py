@@ -49,8 +49,9 @@ class DivoomLight(LightEntity):
         if ATTR_EFFECT in kwargs:
             self._effect = kwargs[ATTR_EFFECT]
             if self._effect in self._effect_list:
-                channel = self._effect_list.index(self._effect)
-                self._pixoo.set_channel(channel)
+                if not self._effect_list None:
+                    channel = self._effect_list.index(self._effect)
+                    self._pixoo.set_channel(channel)
 
         self._state = True
         self._pixoo.set_screen(True)
