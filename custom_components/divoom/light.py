@@ -22,6 +22,7 @@ class DivoomLight(LightEntity):
         self._attr_has_entity_name = True
         self._name = "Light"
         self._pixoo = Pixoo(self._ip_address) if pixoo is None else pixoo
+        self.color_mode = ColorMode.BRIGHTNESS
         self._brightness = None
         self._state = None
         self.effect_list = ["Faces", "Cloud Channel", "Visualizer", "Custom"]
@@ -68,9 +69,9 @@ class DivoomLight(LightEntity):
         self.effect = self.effect_list[channel]
         self._brightness = int((brightness_percent / 100.0) * 255)
 
-    # @property
-    # def supported_color_modes(self) -> set[ColorMode] | set[str] | None:
-    #     return {ColorMode.ONOFF, ColorMode.BRIGHTNESS}
+    @property
+    def supported_color_modes(self) -> set[ColorMode] | set[str] | None:
+        return {ColorMode.BRIGHTNESS}
     
     @property
     def supported_features(self) -> LightEntityFeature:
