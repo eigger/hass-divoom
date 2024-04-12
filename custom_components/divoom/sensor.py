@@ -17,23 +17,155 @@ from .const import DOMAIN, VERSION
 from .pages._pages import special_pages
 from .pixoo64._font import FONT_PICO_8, FONT_GICKO, FIVE_PIX, ELEVEN_PIX, CLOCK
 
-
 _LOGGER = logging.getLogger(__name__)
 
-
 async def async_setup_entry(hass, config_entry: ConfigEntry, async_add_entities):
-    async_add_entities([ Pixoo64(config_entry=config_entry, pixoo=hass.data[DOMAIN][config_entry.entry_id]["pixoo"]) ], True)
+    async_add_entities([ 
+        ConfigSensor(config_entry=config_entry, pixoo=hass.data[DOMAIN][config_entry.entry_id]["pixoo"]),
+        WeatherSensor(config_entry=config_entry, pixoo=hass.data[DOMAIN][config_entry.entry_id]["pixoo"])], True)
 
-    platform = entity_platform.current_platform.get()
-    platform.async_register_entity_service(
-        'show_message',
-        {
-            vol.Required('page_data'): dict,
-            vol.Optional('duration'): int
-        },
-        'async_show_message',
-    )
+    # platform = entity_platform.current_platform.get()
+    # platform.async_register_entity_service(
+    #     'show_message',
+    #     {
+    #         vol.Required('page_data'): dict,
+    #         vol.Optional('duration'): int
+    #     },
+    #     'async_show_message',
+    # )
 
+
+class ConfigSensor(Entity):
+    def __init__(self, scan_interval=timedelta(seconds=15), pixoo=None, config_entry=None):
+        # self._ip_address = ip_address
+        self._pixoo = pixoo
+        self._config_entry = config_entry
+        self._scan_interval = timedelta(seconds=int(self._config_entry.options.get('scan_interval', scan_interval)))
+        self._attr_has_entity_name = True
+        self._attr_name = 'Config'
+        self._attr_extra_state_attributes = {
+            'Brightness': 0,
+            'RotationFlag': 0,
+            'ClockTime': 0,
+            'GalleryTime': 0,
+            'SingleGalleyTime': 0,
+            'PowerOnChannelId': 0,
+            'GalleryShowTimeFlag': 0,
+            'CurClockId': 0,
+            'Time24Flag': 0,
+            'TemperatureMode': 0,
+            'GyrateAngle': 0,
+            'MirrorFlag': 0,
+            'LightSwitch': 0 }
+        self.last_update = datetime.now()
+
+    async def async_added_to_hass(self):
+        if DOMAIN in self.hass.data:
+            self.hass.data[DOMAIN].setdefault('entities', []).append(self)
+        self._update_interval = async_track_time_interval(
+            self.hass,
+            self._async_update,
+            self._scan_interval
+        )
+        await self._async_update()
+
+    async def async_will_remove_from_hass(self):
+        """When entity is being removed from hass."""
+        if self._update_interval is not None:
+            self._update_interval()
+            self._update_interval = None
+
+    async def _async_update(self, now=None):
+        config = self._pixoo.get_all_conf()
+        self._attr_extra_state_attributes = config.copy()
+        self.last_update = datetime.now()
+
+    @property
+    def state(self):
+        return self.last_update
+
+    @property
+    def entity_category(self):
+        return EntityCategory.DIAGNOSTIC
+
+
+    @property
+    def device_info(self) -> DeviceInfo:
+        return DeviceInfo(
+            identifiers={(DOMAIN, str(self._config_entry.entry_id)) if self._config_entry is not None else (DOMAIN, "divoom")},
+            name=self._config_entry.title,
+            manufacturer="Divoom",
+            model="Pixoo",
+            sw_version=VERSION,
+        )
+
+    @property
+    def unique_id(self):
+        return "divoom_config_" + str(self._config_entry.entry_id)
+    
+    
+class WeatherSensor(Entity):
+    def __init__(self, scan_interval=timedelta(seconds=15), pixoo=None, config_entry=None):
+        # self._ip_address = ip_address
+        self._pixoo = pixoo
+        self._config_entry = config_entry
+        self._scan_interval = timedelta(seconds=int(self._config_entry.options.get('scan_interval', scan_interval)))
+        self._attr_has_entity_name = True
+        self._attr_name = 'Weather'
+        self._attr_extra_state_attributes = {
+            'Weather': 0,
+            'CurTemp': 0,
+            'MinTemp': 0,
+            'MaxTemp': 0,
+            'Pressure': 0,
+            'Humidity': 0,
+            'Visibility': 0,
+            'WindSpeed': 0 }
+        self.last_update = datetime.now()
+
+    async def async_added_to_hass(self):
+        if DOMAIN in self.hass.data:
+            self.hass.data[DOMAIN].setdefault('entities', []).append(self)
+        self._update_interval = async_track_time_interval(
+            self.hass,
+            self._async_update,
+            self._scan_interval
+        )
+        await self._async_update()
+
+    async def async_will_remove_from_hass(self):
+        """When entity is being removed from hass."""
+        if self._update_interval is not None:
+            self._update_interval()
+            self._update_interval = None
+
+    async def _async_update(self, now=None):
+        config = self._pixoo.get_weather()
+        self._attr_extra_state_attributes = config.copy()
+        self.last_update = datetime.now()
+
+    @property
+    def state(self):
+        return self._attr_extra_state_attributes['Weather']
+
+    @property
+    def entity_category(self):
+        return EntityCategory.DIAGNOSTIC
+
+
+    @property
+    def device_info(self) -> DeviceInfo:
+        return DeviceInfo(
+            identifiers={(DOMAIN, str(self._config_entry.entry_id)) if self._config_entry is not None else (DOMAIN, "divoom")},
+            name=self._config_entry.title,
+            manufacturer="Divoom",
+            model="Pixoo",
+            sw_version=VERSION,
+        )
+
+    @property
+    def unique_id(self):
+        return "divoom_weather_" + str(self._config_entry.entry_id)
 
 class Pixoo64(Entity):
 

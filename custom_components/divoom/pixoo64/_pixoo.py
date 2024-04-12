@@ -372,6 +372,13 @@ class Pixoo:
         data = response.json()
         return data
     
+    def get_weather(self):
+        response = requests.post(self.__url, json.dumps({
+            'Command': 'Device/GetWeatherInfo'
+        }), timeout=self.timeout)
+        data = response.json()
+        return data
+    
     def get_state(self):
         response = requests.post(self.__url, json.dumps({
             'Command': 'Channel/GetAllConf'
