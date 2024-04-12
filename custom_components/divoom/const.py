@@ -1,3 +1,2 @@
 DOMAIN = "divoom"
 VERSION = "1.0.0"
-CURRENT_ENTRY_VERSION = 2

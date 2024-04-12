@@ -5,7 +5,7 @@ from homeassistant.helpers.selector import ObjectSelector, ObjectSelectorConfig,
     DurationSelector, DurationSelectorConfig, NumberSelector, NumberSelectorConfig, NumberSelectorMode, SelectSelector, \
     SelectSelectorConfig, SelectSelectorMode
 
-from .const import DOMAIN, CURRENT_ENTRY_VERSION
+from .const import DOMAIN
 import voluptuous as vol
 from . import load_pixoo
 
@@ -19,7 +19,6 @@ def get_lan_devices():
 
 
 class ConfigFlowHandler(config_entries.ConfigFlow, config_entries.OptionsFlow, domain=DOMAIN):
-    VERSION = CURRENT_ENTRY_VERSION  # Version for new entries. Managed by HA
 
     def __init__(self, config_entry: ConfigEntry = None):
         self.entry_options = config_entry.options if config_entry else {"ip_address": "", "scan_interval": "15",

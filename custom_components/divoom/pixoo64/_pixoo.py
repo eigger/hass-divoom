@@ -358,6 +358,20 @@ class Pixoo:
         if data['error_code'] != 0:
             self.__error(data)
 
+    def get_channel(self):
+        response = requests.post(self.__url, json.dumps({
+            'Command': 'Channel/GetIndex'
+        }), timeout=self.timeout)
+        data = response.json()
+        return data['SelectIndex']
+    
+    def get_all_conf(self):
+        response = requests.post(self.__url, json.dumps({
+            'Command': 'Channel/GetAllConf'
+        }), timeout=self.timeout)
+        data = response.json()
+        return data
+    
     def get_state(self):
         response = requests.post(self.__url, json.dumps({
             'Command': 'Channel/GetAllConf'

@@ -24,6 +24,7 @@ class DivoomLight(LightEntity):
         self._pixoo = Pixoo(self._ip_address) if pixoo is None else pixoo
         self._brightness = None
         self._state = None
+        self.effect_list = ["Faces", "Cloud Channel", "Visualizer", "Custom"]
         _LOGGER.debug(f"Divoom IP address from configuration: {self._ip_address}")
 
     @property
@@ -52,8 +53,11 @@ class DivoomLight(LightEntity):
         self._pixoo.set_screen(False)
 
     def update(self) -> None:
-        self._state = self._pixoo.get_state()
-        brightness_percent = self._pixoo.get_brightness()
+        conf = self._pixoo.get_all_conf()
+        self._state = conf['LightSwitch'] == 1
+        brightness_percent = conf['Brightness']
+        channel = self._pixoo.get_channel()
+        self.effect = self.effect_list[channel]
         self._brightness = int((brightness_percent / 100.0) * 255)
 
     @property
