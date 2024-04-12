@@ -86,7 +86,7 @@ class ConfigSensor(Entity):
 
     @property
     def state(self):
-        return self._attr_extra_state_attributes['Error code']
+        return self._attr_extra_state_attributes['LightSwitch']
 
     @property
     def entity_category(self):
