@@ -1,4 +1,4 @@
-show_message:
+show_page:
   name: Send a page to Divoom
   description: Display a specified page on the Divoom. Please select the "... Current Page" entity of the device.
   target:
@@ -7,6 +7,32 @@ show_message:
       integration: divoom
   fields:
     page_data:
+      name: Page Data
+      description: "Consider this as one page, so start at 'page_type=something' (ignore the '-' in front)."
+      required: true
+      example: "page_type: clock\n enabled: true\n id: 182"
+      selector:
+        object:
+    duration:
+      name: Duration of the notification
+      description: "This will be the time the message is displayed on the device. Default: the device's scan_time in the config."
+      required: false
+      example: "10"
+      selector:
+        number:
+          min: 1
+          max: 9999
+          unit_of_measurement: seconds
+          mode: box
+show_message:
+  name: Send a page to Divoom
+  description: Display a specified page on the Divoom. Please select the "... Current Page" entity of the device.
+  target:
+    entity:
+      domain: light
+      integration: divoom
+  fields:
+    message:
       name: Page Data
       description: "Consider this as one page, so start at 'page_type=something' (ignore the '-' in front)."
       required: true

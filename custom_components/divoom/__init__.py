@@ -1,6 +1,6 @@
 # __init__.py
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.core import HomeAssistant
+from homeassistant.core import HomeAssistant, ServiceCall, callback
 import logging
 from .const import DOMAIN, VERSION
 from .pixoo64 import Pixoo
@@ -30,6 +30,14 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, update=Fals
     if not update:
         entry.add_update_listener(async_update_entry)
 
+    @callback
+    def message_service(call: ServiceCall) -> None:
+        """My first service."""
+        pixoo = hass.data[DOMAIN][entry.entry_id]['pixoo']
+        _LOGGER.info('Received data', call.data)
+
+    # Register our service with Home Assistant.
+    hass.services.async_register(DOMAIN, 'show_message', message_service)
     return True
 
 
