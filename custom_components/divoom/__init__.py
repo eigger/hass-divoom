@@ -60,4 +60,5 @@ async def async_detect_and_fix_old_entry(hass: HomeAssistant, config_entry: Conf
 
 async def async_migrate_entry(hass: HomeAssistant, config_entry: ConfigEntry):
     """Migrate old entry. Called for every entry when HA find the versions don't match."""
+    return True
 
