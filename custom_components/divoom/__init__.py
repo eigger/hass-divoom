@@ -1,7 +1,7 @@
 # __init__.py
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant, ServiceCall, callback
-import logging
+import logging, time
 from .const import DOMAIN, VERSION
 from .pixoo64 import Pixoo
 
@@ -43,9 +43,12 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, update=Fals
 def async_message_service(pixoo, call):
     if 'message' in call.data:
         msg = call.data['message']
+        pixoo.set_channel(3)
         pixoo.clear()
         pixoo.push()
         pixoo.send_text(msg)
+        time.sleep(call.data['duration'])
+        pixoo.set_channel(0)
     else
         _LOGGER.error(f"Error message: {call.data}")
 
