@@ -1,4 +1,4 @@
-from homeassistant.components.light import (LightEntity, ATTR_BRIGHTNESS, SUPPORT_BRIGHTNESS, ColorMode, LightEntityFeature)
+from homeassistant.components.light import (LightEntity, ATTR_EFFECT, ATTR_BRIGHTNESS, SUPPORT_BRIGHTNESS, ColorMode, LightEntityFeature)
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.helpers.entity import DeviceInfo
 
@@ -25,7 +25,7 @@ class DivoomLight(LightEntity):
         self.color_mode = ColorMode.BRIGHTNESS
         self._brightness = None
         self._state = None
-        self.effect_list = ["Faces", "Cloud Channel", "Visualizer", "Custom"]
+        self._effect_list = ["Faces", "Cloud Channel", "Visualizer", "Custom"]
         _LOGGER.debug(f"Divoom IP address from configuration: {self._ip_address}")
 
     @property
@@ -46,20 +46,17 @@ class DivoomLight(LightEntity):
             self._brightness = kwargs[ATTR_BRIGHTNESS]
             brightness_percent = int((self._brightness / 255.0) * 100)
             self._pixoo.set_brightness(brightness_percent)
+        if ATTR_EFFECT in kwargs:
+            self._effect = kwargs[ATTR_EFFECT]
+            channel = self._effect_list.index(self._effect)
+            self._pixoo.set_channel(channel)
+
         self._state = True
         self._pixoo.set_screen(True)
 
     def turn_off(self, **kwargs):
         self._state = False
         self._pixoo.set_screen(False)
-
-    def effect(self, value):
-        _LOGGER.debug(f"set effect: {value}")
-        try:
-            channel = self.effect_list.index(value)
-            self._pixoo.set_channel(channel)
-        except ValueError:
-            _LOGGER.debug(f"set effect error: {ValueError}")
 
     def update(self) -> None:
         conf = self._pixoo.get_all_conf()

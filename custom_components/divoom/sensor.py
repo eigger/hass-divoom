@@ -44,6 +44,7 @@ class ConfigSensor(Entity):
         self._attr_has_entity_name = True
         self._attr_name = 'Config'
         self._attr_extra_state_attributes = {
+            'Error code': 0,
             'Brightness': 0,
             'RotationFlag': 0,
             'ClockTime': 0,
@@ -116,6 +117,7 @@ class WeatherSensor(Entity):
         self._attr_has_entity_name = True
         self._attr_name = 'Weather'
         self._attr_extra_state_attributes = {
+            'Error code': 0,
             'Weather': 0,
             'CurTemp': 0,
             'MinTemp': 0,
