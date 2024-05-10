@@ -107,6 +107,11 @@ class ConfigSensor(Entity):
     def unique_id(self):
         return "divoom_config_" + str(self._config_entry.entry_id)
     
+    @property
+    def icon(self) -> str | None:
+        """Icon of the entity, based on time."""
+        return "mdi:cog-outline"
+    
     
 class WeatherSensor(Entity):
     def __init__(self, scan_interval=timedelta(seconds=15), pixoo=None, config_entry=None):
@@ -174,6 +179,11 @@ class WeatherSensor(Entity):
     @property
     def unique_id(self):
         return "divoom_weather_" + str(self._config_entry.entry_id)
+    
+    @property
+    def icon(self) -> str | None:
+        """Icon of the entity, based on time."""
+        return "mdi:weather-" + str(self._attr_extra_state_attributes['Weather']).lower()
 
 class Pixoo64(Entity):
 
