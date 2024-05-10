@@ -47,7 +47,7 @@ class DivoomLight(LightEntity):
             brightness_percent = int((self._brightness / 255.0) * 100)
             self._pixoo.set_brightness(brightness_percent)
         if ATTR_EFFECT in kwargs:
-            self.effect= kwargs[ATTR_EFFECT]
+            self.effect = kwargs[ATTR_EFFECT]
             if self.effect in self.effect_list:
                 channel = self.effect_list.index(self.effect)
                 self._pixoo.set_channel(channel)
@@ -89,3 +89,16 @@ class DivoomLight(LightEntity):
             model="Pixoo",
             sw_version=VERSION,
         )
+
+    @property
+    def icon(self) -> str | None:
+        """Icon of the entity, based on time."""
+        if self.effect == "Faces":
+            return "mdi:clock"
+        elif self.effect == "Cloud Channel":
+            return "mdi:cloud"
+        elif self.effect == "Visualizer":
+            return "mdi:waveform"
+        elif self.effect == "Custom":
+            return "mdi:panorama-variant"       
+        return "mdi:monitor-shimmer"
