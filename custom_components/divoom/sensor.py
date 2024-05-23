@@ -183,7 +183,10 @@ class WeatherSensor(Entity):
     @property
     def icon(self) -> str | None:
         """Icon of the entity, based on time."""
-        return "mdi:weather-" + str(self._attr_extra_state_attributes['Weather']).lower()
+        weather = str(self._attr_extra_state_attributes['Weather']).lower()
+        if weather == "frog":
+            weather = "fog"
+        return "mdi:weather-" + weather
 
 class Pixoo64(Entity):
 
