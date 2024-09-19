@@ -60,12 +60,15 @@ class DivoomLight(LightEntity):
         self._pixoo.set_screen(False)
 
     def update(self) -> None:
-        conf = self._pixoo.get_all_conf()
-        self._state = conf['LightSwitch'] == 1
-        brightness_percent = conf['Brightness']
-        channel = self._pixoo.get_channel()
-        self.effect = self.effect_list[channel]
-        self._brightness = int((brightness_percent / 100.0) * 255)
+        try:
+            conf = self._pixoo.get_all_conf()
+            self._state = conf['LightSwitch'] == 1
+            brightness_percent = conf['Brightness']
+            channel = self._pixoo.get_channel()
+            self.effect = self.effect_list[channel]
+            self._brightness = int((brightness_percent / 100.0) * 255)
+        except:
+            pass
 
     @property
     def supported_color_modes(self) -> set[ColorMode] | set[str] | None:

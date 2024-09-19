@@ -80,9 +80,12 @@ class ConfigSensor(Entity):
         await self.hass.async_add_executor_job(self._update_config)
 
     def _update_config(self):
-        config = self._pixoo.get_all_conf()
-        self._attr_extra_state_attributes = config.copy()
-        self.last_update = datetime.now()
+        try:
+            config = self._pixoo.get_all_conf()
+            self._attr_extra_state_attributes = config.copy()
+            self.last_update = datetime.now()
+        except:
+            pass
 
     @property
     def state(self):
