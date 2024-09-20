@@ -100,16 +100,16 @@ class ConfigSensor(Entity):
     def device_info(self) -> DeviceInfo:
         return DeviceInfo(
             identifiers={(DOMAIN, str(self._config_entry.entry_id)) if self._config_entry is not None else (DOMAIN, "divoom")},
-            connections={
-                (
-                    CONNECTION_NETWORK_MAC,
-                    self._pixoo.mac_address,
-                )
-            },
-            name=self._config_entry.title,
-            manufacturer="Divoom",
-            model=self._pixoo.name,
-            model_id=self._pixoo.id_number,
+            # connections={
+            #     (
+            #         CONNECTION_NETWORK_MAC,
+            #         self._pixoo.mac_address,
+            #     )
+            # },
+            # name=self._config_entry.title,
+            # manufacturer="Divoom",
+            # model=self._pixoo.name,
+            # model_id=self._pixoo.id_number,
         )
 
     @property
@@ -179,16 +179,16 @@ class WeatherSensor(Entity):
     def device_info(self) -> DeviceInfo:
         return DeviceInfo(
             identifiers={(DOMAIN, str(self._config_entry.entry_id)) if self._config_entry is not None else (DOMAIN, "divoom")},
-            connections={
-                (
-                    CONNECTION_NETWORK_MAC,
-                    self._pixoo.mac_address,
-                )
-            },
-            name=self._config_entry.title,
-            manufacturer="Divoom",
-            model=self._pixoo.name,
-            model_id=self._pixoo.id_number,
+            # connections={
+            #     (
+            #         CONNECTION_NETWORK_MAC,
+            #         self._pixoo.mac_address,
+            #     )
+            # },
+            # name=self._config_entry.title,
+            # manufacturer="Divoom",
+            # model=self._pixoo.name,
+            # model_id=self._pixoo.id_number,
         )
 
     @property
