@@ -65,7 +65,7 @@ class DivoomLight(LightEntity):
             if len(self._pixoo.name) == 0:
                 devices = self._pixoo.get_lan_devices()
                 for device in devices:
-                    if self._pixoo.address is device["DevicePrivateIP"]:
+                    if self._pixoo.address == device["DevicePrivateIP"]:
                         self._pixoo.name = device["DeviceName"]
                         self._pixoo.id_number = device["DeviceId"]
                         self._pixoo.mac_address = device["DeviceMac"]
