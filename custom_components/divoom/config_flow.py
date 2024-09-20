@@ -5,7 +5,7 @@ from homeassistant.helpers.selector import ObjectSelector, ObjectSelectorConfig,
     DurationSelector, DurationSelectorConfig, NumberSelector, NumberSelectorConfig, NumberSelectorMode, SelectSelector, \
     SelectSelectorConfig, SelectSelectorMode
 
-from .const import DOMAIN, VERSION
+from .const import DOMAIN
 import voluptuous as vol
 from . import load_pixoo
 
@@ -21,8 +21,7 @@ def get_lan_devices():
 class ConfigFlowHandler(config_entries.ConfigFlow, config_entries.OptionsFlow, domain=DOMAIN):
 
     def __init__(self, config_entry: ConfigEntry = None):
-        self.entry_options = config_entry.options if config_entry else {"ip_address": "", "scan_interval": "15",
-                                                                        "pages_data": [{'page_type': 'PV', 'power': '{{ states.sensor.YOUR_SENSOR.state }}', 'storage': '{{ states.sensor.YOUR_SENSOR.state }}', 'discharge': '{{ states.sensor.YOUR_SENSOR.state }}', 'powerhousetotal': '{{ states.sensor.YOUR_SENSOR.state }}', 'vomNetz': '{{ states.sensor.YOUR_SENSOR.state }}', 'time': "{{ now().strftime('%H:%M') }}"}, {'page_type': 'components', 'components': [{'type': 'text', 'content': 'github/gickowtf', 'position': [0, 10], 'font': 'PICO_8', 'color': [255, 0, 0]}, {'type': 'text', 'content': 'Thx 4 Support', 'position': [0, 30], 'font': 'PICO_8', 'color': [255, 0, 0]}, {'type': 'image', 'image_path': '/config/custom_components/divoom/img/haus.png', 'position': [30, 10]}]}, {'page_type': 'channel', 'id': 2}, {'page_type': 'clock', 'id': 39}]}
+        self.entry_options = config_entry.options if config_entry else {"ip_address": "", "scan_interval": "15"}
 
     async def async_step_user(self, user_input: dict = None):
         # Called when the user creates a new entry. This will open a page with discovered new devices if there's any.
@@ -81,18 +80,11 @@ class ConfigFlowHandler(config_entries.ConfigFlow, config_entries.OptionsFlow, d
 
         return self.async_show_form(
             step_id="config", errors=errors, data_schema=vol.Schema({
-                vol.Required("ip_address",
-                             default=user_input.get("ip_address", self.entry_options.get("ip_address"))): str,
+                vol.Required("ip_address", default=user_input.get("ip_address", self.entry_options.get("ip_address"))): str,
                 vol.Required("scan_interval", default=user_input.get("scan_interval", self.entry_options.get(
                     "scan_interval"))): NumberSelector(
                     NumberSelectorConfig(min=1, max=9999, step=1, mode=NumberSelectorMode.BOX, unit_of_measurement="seconds")
                 ),
-                vol.Required("pages_data",
-                             default=user_input.get("pages_data",
-                                                    self.entry_options.get("pages_data"))): ObjectSelector(
-                    ObjectSelectorConfig()
-
-                )
             })
         )
 

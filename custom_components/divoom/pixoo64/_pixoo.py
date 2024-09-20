@@ -66,7 +66,6 @@ class Pixoo:
     __counter = 0
     __refresh_counter_limit = 32
     timeout = 10
-
     def __init__(self, address, size=64, debug=False, refresh_connection_automatically=True):
         assert size in [16, 32, 64], \
             'Invalid screen size in pixels given. ' \
@@ -76,6 +75,9 @@ class Pixoo:
         self.address = address
         self.debug = debug
         self.size = size
+        self.name = ""
+        self.id_number = ""
+        self.mac_address = ""
 
         # Total number of pixels
         self.pixel_count = self.size * self.size
@@ -372,6 +374,11 @@ class Pixoo:
         }), timeout=self.timeout)
         data = response.json()
         return data
+    
+    def get_lan_devices(self):
+        response = requests.get("https://app.divoom-gz.com/Device/ReturnSameLANDevice", timeout=self.timeout)
+        data = response.json()
+        return data["DeviceList"]
     
     def get_weather(self):
         response = requests.post(self.__url, json.dumps({

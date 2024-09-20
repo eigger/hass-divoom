@@ -1,8 +1,8 @@
 from homeassistant.components.light import (LightEntity, ATTR_EFFECT, ATTR_BRIGHTNESS, SUPPORT_BRIGHTNESS, ColorMode, LightEntityFeature)
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.helpers.entity import DeviceInfo
+from homeassistant.helpers.entity import DeviceInfo, CONNECTION_NETWORK_MAC
 
-from . import DOMAIN, VERSION
+from . import DOMAIN
 
 from .pixoo64._pixoo import Pixoo
 import logging
@@ -61,12 +61,22 @@ class DivoomLight(LightEntity):
 
     def update(self) -> None:
         try:
+            if len(self._pixoo.name) == 0:
+                devices = self._pixoo.get_lan_devices()
+                for device in devices:
+                    if self._pixoo.address is device["DevicePrivateIP"]:
+                        self._pixoo.name = device["DeviceName"]
+                        self._pixoo.id_number = device["DeviceId"]
+                        self._pixoo.mac_address = device["DeviceMac"]
+
             conf = self._pixoo.get_all_conf()
             self._state = conf['LightSwitch'] == 1
             brightness_percent = conf['Brightness']
             channel = self._pixoo.get_channel()
             self.effect = self.effect_list[channel]
             self._brightness = int((brightness_percent / 100.0) * 255)
+
+
         except:
             pass
 
@@ -87,10 +97,16 @@ class DivoomLight(LightEntity):
     def device_info(self) -> DeviceInfo:
         return DeviceInfo(
             identifiers={(DOMAIN, str(self._config_entry.entry_id)) if self._config_entry is not None else (DOMAIN, "divoom")},
+            connections={
+                (
+                    CONNECTION_NETWORK_MAC,
+                    self._pixoo.mac_address,
+                )
+            },
             name=self._config_entry.title,
             manufacturer="Divoom",
-            model="Pixoo",
-            sw_version=VERSION,
+            model=self._pixoo.name,
+            model_id=self._pixoo.id_number,
         )
 
     @property

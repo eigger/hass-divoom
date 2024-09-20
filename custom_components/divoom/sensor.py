@@ -7,13 +7,13 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import EntityCategory
 from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers import entity_platform
-from homeassistant.helpers.device_registry import DeviceInfo
+from homeassistant.helpers.device_registry import DeviceInfo, CONNECTION_NETWORK_MAC
 from homeassistant.helpers.entity import Entity
 from homeassistant.helpers.event import async_track_time_interval
 from homeassistant.helpers.template import Template, TemplateError
 
 from .pixoo64._colors import get_rgb, CSS4_COLORS, render_color
-from .const import DOMAIN, VERSION
+from .const import DOMAIN
 from .pages._pages import special_pages
 from .pixoo64._font import FONT_PICO_8, FONT_GICKO, FIVE_PIX, ELEVEN_PIX, CLOCK
 
@@ -100,10 +100,16 @@ class ConfigSensor(Entity):
     def device_info(self) -> DeviceInfo:
         return DeviceInfo(
             identifiers={(DOMAIN, str(self._config_entry.entry_id)) if self._config_entry is not None else (DOMAIN, "divoom")},
+            connections={
+                (
+                    CONNECTION_NETWORK_MAC,
+                    self._pixoo.mac_address,
+                )
+            },
             name=self._config_entry.title,
             manufacturer="Divoom",
-            model="Pixoo",
-            sw_version=VERSION,
+            model=self._pixoo.name,
+            model_id=self._pixoo.id_number,
         )
 
     @property
@@ -173,10 +179,16 @@ class WeatherSensor(Entity):
     def device_info(self) -> DeviceInfo:
         return DeviceInfo(
             identifiers={(DOMAIN, str(self._config_entry.entry_id)) if self._config_entry is not None else (DOMAIN, "divoom")},
+            connections={
+                (
+                    CONNECTION_NETWORK_MAC,
+                    self._pixoo.mac_address,
+                )
+            },
             name=self._config_entry.title,
             manufacturer="Divoom",
-            model="Pixoo",
-            sw_version=VERSION,
+            model=self._pixoo.name,
+            model_id=self._pixoo.id_number,
         )
 
     @property
@@ -336,10 +348,16 @@ class Pixoo64(Entity):
     def device_info(self) -> DeviceInfo:
         return DeviceInfo(
             identifiers={(DOMAIN, str(self._config_entry.entry_id)) if self._config_entry is not None else (DOMAIN, "divoom")},
+            connections={
+                (
+                    CONNECTION_NETWORK_MAC,
+                    self._pixoo.mac_address,
+                )
+            },
             name=self._config_entry.title,
             manufacturer="Divoom",
-            model="Pixoo",
-            sw_version=VERSION,
+            model=self._pixoo.name,
+            model_id=self._pixoo.id_number,
         )
 
     @property

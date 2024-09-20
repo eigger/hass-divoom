@@ -2,7 +2,7 @@
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant, ServiceCall, callback
 import logging, time
-from .const import DOMAIN, VERSION
+from .const import DOMAIN
 from .pixoo64 import Pixoo
 
 _LOGGER = logging.getLogger(__name__)
