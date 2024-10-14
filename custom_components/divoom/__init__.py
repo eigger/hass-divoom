@@ -34,13 +34,27 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, update=Fals
     def message_service(call: ServiceCall) -> None:
         """My first service."""
         pixoo = hass.data[DOMAIN][entry.entry_id]['pixoo']
-        hass.async_add_executor_job(async_message_service, pixoo, call)
+        hass.async_add_executor_job(async_service, pixoo, call)
+
+    @callback
+    def countdown_service(call: ServiceCall) -> None:
+        """My first service."""
+        pixoo = hass.data[DOMAIN][entry.entry_id]['pixoo']
+        hass.async_add_executor_job(async_service, pixoo, call)
+        
+    @callback
+    def stopwatch_service(call: ServiceCall) -> None:
+        """My first service."""
+        pixoo = hass.data[DOMAIN][entry.entry_id]['pixoo']
+        hass.async_add_executor_job(async_service, pixoo, call)
 
     # Register our service with Home Assistant.
     hass.services.async_register(DOMAIN, 'show_message', message_service)
+    hass.services.async_register(DOMAIN, 'countdown', countdown_service)
+    hass.services.async_register(DOMAIN, 'stopwatch', stopwatch_service)
     return True
 
-def async_message_service(pixoo, call):
+def async_service(pixoo, call):
     if 'message' in call.data:
         msg = call.data['message']
         channel = pixoo.get_channel()
@@ -51,9 +65,25 @@ def async_message_service(pixoo, call):
         _LOGGER.info(f"response message: {response}")
         time.sleep(call.data['duration'])
         pixoo.set_channel(channel)
+    elif 'minute' in call.data and 'second' in call.data:
+        minute = call.data['minute']
+        second = call.data['second']
+        if int(minute) > 0 or int(second) > 0:
+            response = pixoo.start_countdown(minute, second)
+        else:
+            response = pixoo.stop_countdown(minute, second)
+        _LOGGER.info(f"response message: {response}")
+    elif 'mode' in call.data:
+        mode = call.data['mode']
+        if mode == 'reset':
+            response = pixoo.set_stopwatch(2)
+        elif mode == 'start': 
+            response = pixoo.set_stopwatch(1)
+        else:
+            response = pixoo.set_stopwatch(0)
+        _LOGGER.info(f"response message: {response}")
     else:
         _LOGGER.error(f"Error message: {call.data}")
-
 
 def load_pixoo(ip_address: str):
     """Load the Pixoo device. This is a blocking call."""

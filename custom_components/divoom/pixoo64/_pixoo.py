@@ -361,6 +361,37 @@ class Pixoo:
         if data['error_code'] != 0:
             self.__error(data)
 
+    def start_countdown(self, minute, second):
+        response = requests.post(self.__url, json.dumps({
+            'Command': 'Tools/SetTimer',
+            'Minute': int(minute),
+            'Second': int(second),
+            'Status': '1'
+        }), timeout=self.timeout)
+        data = response.json()
+        if data['error_code'] != 0:
+            self.__error(data)
+
+    def stop_countdown(self):
+        response = requests.post(self.__url, json.dumps({
+            'Command': 'Tools/SetTimer',
+            'Minute': '0',
+            'Second': '0',
+            'Status': '0'
+        }), timeout=self.timeout)
+        data = response.json()
+        if data['error_code'] != 0:
+            self.__error(data)
+
+    def set_stopwatch(self, mode):
+        response = requests.post(self.__url, json.dumps({
+            'Command': 'Tools/SetStopWatch',
+            'Status': int(mode)
+        }), timeout=self.timeout)
+        data = response.json()
+        if data['error_code'] != 0:
+            self.__error(data)
+
     def get_channel(self):
         response = requests.post(self.__url, json.dumps({
             'Command': 'Channel/GetIndex'

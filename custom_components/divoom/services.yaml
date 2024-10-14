@@ -50,3 +50,50 @@ show_message:
           max: 9999
           unit_of_measurement: seconds
           mode: box
+
+countdown:
+  name: Countdown Divoom
+  description: Display countdown on the Divoom
+  target:
+    entity:
+      domain: light
+      integration: divoom
+  fields:
+    minute:
+      name: Minute
+      description: "the countdown’s minute"
+      required: true
+      example: "10"
+      selector:
+        number:
+          min: 0
+          max: 9999
+          unit_of_measurement: minutes
+          mode: box
+    second:
+      name: Second
+      description: "the countdown’s second"
+      required: true
+      example: "0"
+      selector:
+        number:
+          min: 0
+          max: 9999
+          unit_of_measurement: seconds
+          mode: box
+
+stopwatch:
+  name: Stopwatch Divoom
+  description: Display stopwatch on the Divoom
+  target:
+    entity:
+      domain: light
+      integration: divoom
+  fields:
+    mode:
+      name: Mode
+      description: "reset, start, stop"
+      required: true
+      example: "start"
+      selector:
+        text:
