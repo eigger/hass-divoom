@@ -69,9 +69,10 @@ def async_service(pixoo, call):
         minute = call.data['minute']
         second = call.data['second']
         if int(minute) > 0 or int(second) > 0:
-            response = pixoo.start_countdown(minute, second)
+            response = pixoo.set_countdown(minute, second, 2)
+            response = pixoo.set_countdown(minute, second, 1)
         else:
-            response = pixoo.stop_countdown(minute, second)
+            response = pixoo.set_countdown(minute, second, 0)
         _LOGGER.info(f"response message: {response}")
     elif 'mode' in call.data:
         mode = call.data['mode']

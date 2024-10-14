@@ -67,7 +67,7 @@ countdown:
       selector:
         number:
           min: 0
-          max: 9999
+          max: 90
           unit_of_measurement: minutes
           mode: box
     second:
@@ -78,7 +78,7 @@ countdown:
       selector:
         number:
           min: 0
-          max: 9999
+          max: 59
           unit_of_measurement: seconds
           mode: box
 
