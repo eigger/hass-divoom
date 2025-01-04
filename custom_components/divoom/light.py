@@ -1,4 +1,4 @@
-from homeassistant.components.light import (LightEntity, ATTR_EFFECT, ATTR_BRIGHTNESS, SUPPORT_BRIGHTNESS, ColorMode, LightEntityFeature)
+from homeassistant.components.light import (LightEntity, ATTR_EFFECT, ATTR_BRIGHTNESS, ColorMode, LightEntityFeature)
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.helpers.entity import DeviceInfo
 from homeassistant.helpers.device_registry import DeviceInfo, CONNECTION_NETWORK_MAC
