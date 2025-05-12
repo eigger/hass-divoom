@@ -13,3 +13,6 @@ repository into the `custom_components/divoom` directory.
 **IP address of the device:** discovered or manually entered IP
 
 **Scan interval (in seconds):** #default 15 seconds (this is the time a page is displayed )
+
+## References
+- [gickowtf](https://github.com/gickowtf/pixoo-homeassistant.git)
